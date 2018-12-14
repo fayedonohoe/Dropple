@@ -39,6 +39,7 @@ mainMenu.create = function(){
         }
         
         menubg.setOrigin(0,0);
+        this.menubg.setScale(4);
         playbutton.setOrigin(0,0);
         helpbutton.setOrigin(0,0);
         mutebutton.setOrigin(0,0);
@@ -54,7 +55,7 @@ mainMenu.create = function(){
         mutebutton.setInteractive();
         //mutebutton.on('pointerdown', () => mute=true);
         mutebutton.on('pointerdown', () => toggleMute());
-        //mutebutton.on('pointerdown', () => menu_music.stop());
+        mutebutton.on('pointerdown', () => menu_music.stop());
         
         
     }
@@ -75,6 +76,7 @@ helpScreen.create = function () {
 
     
     let helpbg = this.add.sprite(0, 0, 'helpbg');
+    this.helpbg.setScale(4);
     let menubutton = this.add.sprite(60, 250, 'menubutton');
     
     helpbg.setOrigin(0,0);
@@ -131,16 +133,16 @@ gameScene.create = function () {
     
     // create bg sprite
     let bg = this.add.sprite(0, 0, 'background');
-
     // change the origin to the top-left corner
     bg.setOrigin(0, 0);
+    this.bg.setScale(4);
 
     // create the player
     this.player = this.physics.add.sprite(80, this.sys.game.config.height - 100, 'player');
     this.player.body.allowGravity = false;
 
     //reducing the width and height 
-    this.player.setScale(0.8);
+    this.player.setScale(1.2);
     
     drops = this.physics.add.group({
         key: 'drop',
