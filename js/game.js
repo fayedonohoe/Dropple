@@ -163,12 +163,12 @@ gameScene.create = function () {
     }
 
     
-//    var timer = this.time.delayedCall(30000, function() {gameScene.gameOver()}, [], this);
-//    console.log(timer);
+    var timer = this.time.delayedCall(30000, function() {gameScene.gameOver()}, [], this);
+    console.log(timer);
     
     // FOR TESTING ONLY
-    var timer = this.time.delayedCall(1000, function() {gameScene.gameOver()}, [], this);
-    console.log(timer);
+//    var timer = this.time.delayedCall(1000, function() {gameScene.gameOver()}, [], this);
+//    console.log(timer);
         
     
     //let counter = 100;
