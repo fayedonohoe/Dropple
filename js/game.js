@@ -2,6 +2,7 @@ let mainMenu = new Phaser.Scene('Menu')
     
 
 mainMenu.preload = function() {
+        this.load.image('title', 'assets/title.png');
         this.load.image('menubg', 'assets/bg_menu.jpg');
         this.load.image('playbutton', 'assets/button.png');
         this.load.image('helpbutton', 'assets/helpbutton.png');
@@ -18,9 +19,10 @@ mainMenu.create = function(){
         resize();
         
         let menubg = this.add.sprite(0, 0, 'menubg');
-        let playbutton = this.add.sprite(120, 650, 'playbutton');
-        let helpbutton = this.add.sprite(120, 850, 'helpbutton');
-        let mutebutton = this.add.sprite(120, 1050, 'mutebutton');
+        let title = this.add.sprite(90, 80, 'title');
+        let playbutton = this.add.sprite(120, 550, 'playbutton');
+        let helpbutton = this.add.sprite(120, 750, 'helpbutton');
+        let mutebutton = this.add.sprite(120, 950, 'mutebutton');
         
         var menu_music = this.sound.add('menu_music');
         var game_music = this.sound.add('game_music');
@@ -32,6 +34,7 @@ mainMenu.create = function(){
         }
         
         menubg.setOrigin(0,0);
+        title.setOrigin(0,0);
         playbutton.setOrigin(0,0);
         helpbutton.setOrigin(0,0);
         mutebutton.setOrigin(0,0);
@@ -67,7 +70,7 @@ helpScreen.preload = function(){
 helpScreen.create = function () {
         
     let helpbg = this.add.sprite(0, 0, 'helpbg');
-    let menubutton = this.add.sprite(140, 1300, 'menubutton');
+    let menubutton = this.add.sprite(90, 1000, 'menubutton');
     
     helpbg.setOrigin(0,0);
     menubutton.setOrigin(0,0);
