@@ -298,12 +298,12 @@ gameScene.gameOver = function () {
     endText2 = this.add.text(450, 600, total , { fontFamily: 'Calibri', fontStyle:'bold', fontSize: '90px', fill: '#fff' });
     
     
-    let playagainbutton = this.add.sprite(140, 1300, 'playagainbutton')
+    let playagainbutton = this.add.sprite(140, 800, 'playagainbutton')
     playagainbutton.setOrigin(0,0);
     playagainbutton.setInteractive();
     playagainbutton.on('pointerdown', () => this.scene.restart());
     
-    let backtomenubutton = this.add.sprite(140, 1500, 'backtomenubutton')
+    let backtomenubutton = this.add.sprite(140, 1000, 'backtomenubutton')
     backtomenubutton.setOrigin(0,0);
     backtomenubutton.setInteractive();
     //backtomenubutton.on('pointerdown', () => Game.shutUp());
