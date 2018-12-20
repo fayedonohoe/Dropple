@@ -1,5 +1,5 @@
-let mainMenu = new Phaser.Scene('Menu')
-    
+var gameMode;
+let mainMenu = new Phaser.Scene('Menu');
 
 mainMenu.preload = function() {
         this.load.image('title', 'assets/title.png');
@@ -40,7 +40,7 @@ mainMenu.create = function(){
         mutebutton.setOrigin(0,0);
         
         playbutton.setInteractive();
-        playbutton.on('pointerdown', () => this.scene.start('Game'));
+        playbutton.on('pointerdown', () => this.scene.start('Select'));
         playbutton.on('pointerdown', () => menu_music.stop());   
         
         helpbutton.setInteractive();
@@ -57,7 +57,74 @@ mainMenu.create = function(){
     }
 
 
-//this.currentScene = new Menu();
+let modeSelect = new Phaser.Scene('Select');
+modeSelect.preload = function() {
+        this.load.image('title', 'assets/title.png');
+        this.load.image('menubg', 'assets/bg_menu.jpg');
+    
+        this.load.image('easy', 'assets/easy.png');
+        this.load.image('normal', 'assets/normal.png');
+        this.load.image('hard', 'assets/hard.png');
+        this.load.image('easytext', 'assets/easytext.png');
+        this.load.image('normaltext', 'assets/normaltext.png');
+        this.load.image('hardtext', 'assets/hardtext.png');
+        
+        this.load.audio("menu_music", 'assets/Komiku_Home.mp3');
+        this.load.audio("game_music", 'assets/Komiku_Skate.mp3')
+    
+    }
+    
+modeSelect.create = function(){
+    
+        window.addEventListener('resize', resize);
+        resize();
+        
+        let menubg = this.add.sprite(0, 0, 'menubg');
+        let title = this.add.sprite(90, 80, 'title');
+        let easy = this.add.sprite(20, 550, 'easy');
+        let easytext = this.add.sprite(20, 550, 'easytext');
+        let normal = this.add.sprite(335, 550, 'normal');
+        let normaltext = this.add.sprite(335, 550, 'normaltext');
+        let hard = this.add.sprite(650, 550, 'hard');
+        let hardtext = this.add.sprite(650, 550, 'hardtext');
+        
+        var menu_music = this.sound.add('menu_music');
+        var game_music = this.sound.add('game_music');
+    
+//        menu_music.stop(); //does nothing
+//        
+//        if(!mute){
+//            menu_music.play();
+//        }
+        
+        menubg.setOrigin(0,0);
+        title.setOrigin(0,0);
+        easy.setOrigin(0,0);
+        normal.setOrigin(0,0);
+        hard.setOrigin(0,0);
+        easytext.setOrigin(0,0);
+        normaltext.setOrigin(0,0);
+        hardtext.setOrigin(0,0);
+        
+        easy.setInteractive();
+        easy.on('pointerdown', () => gameMode = 1);
+        easy.on('pointerdown', () => this.scene.start('Game'));
+        easy.on('pointerdown', () => menu_music.stop());   
+        
+        normal.setInteractive();
+        normal.on('pointerdown', () => gameMode = 2);
+        normal.on('pointerdown', () => this.scene.start('Game'));
+        normal.on('pointerdown', () => menu_music.stop()); 
+         
+        
+        hard.setInteractive();
+        hard.on('pointerdown', () => gameMode = 3);
+        hard.on('pointerdown', () => this.scene.start('Game'));
+        hard.on('pointerdown', () => menu_music.stop());
+        
+        
+    }
+
 
 var helpScreen = new Phaser.Scene('Help');
 
@@ -144,6 +211,7 @@ gameScene.preload = function () {
     
     // load images
     this.load.image('background', 'assets/bg_blue.jpg');
+    this.load.image('dropzone', 'assets/dropzone.png');
     this.load.image('player', 'assets/abiUP.png');
     this.load.image('drop', 'assets/drop.png');
     
@@ -181,8 +249,11 @@ gameScene.create = function () {
     let bg = this.add.sprite(-50, 0, 'background');
     // change the origin to the top-left corner
     bg.setOrigin(0, 0);
-    //this.bg.setScale(4);
-
+    
+    this.dropzone = this.physics.add.sprite(0, 1850, 'dropzone');
+    this.dropzone.setOrigin(0, 0);
+    this.dropzone.body.allowGravity = false;
+    
     // create the player
     this.player = this.physics.add.sprite(80, this.sys.game.config.height - 280, 'player');
     this.player.body.allowGravity = false;
@@ -199,9 +270,26 @@ gameScene.create = function () {
                }
     });
     
+    if (gameMode == 3){
+        Phaser.Actions.ScaleXY(drops.getChildren(), -0.5, -0.5);
+    }
+    
+//    if (gameMode == 1){
+//        let drops = this.drops.getChildren();
+//        let numdrops = this.drops.length;
+//        for (let i = 0; i < numdrops; i++) {
+//            if (drops[i].y > innerHeight){
+//            resetDrop(drops[i]);   
+//            }
+//        }
+//    }
     
     // Collision
     this.physics.add.overlap(gameScene.player, drops, collectDrop, null, this);
+    
+    if (gameMode == 1){
+        this.physics.add.overlap(gameScene.dropzone, drops, easyReset, null, this);
+    }
     
     //player is alive
     this.isPlayerAlive = true;
@@ -272,10 +360,15 @@ function collectDrop(player, drop)
     totalText.setText("Drops: " + total);   
 }
 
+function easyReset(zone, drop){
+    console.log("easy reset entered");
+    drop.disableBody(true, true);
+    drop.enableBody(true, drop.x, 0, true, true);
+    resetDrop(drop);
+}
+
 function resetDrop(drop){
-    // set random drop speeds, x and y positions
-    drop.speed = drop.speed*1.1;
-    drop.gravity = drop.gravity*2;
+    // set random x and y positions
     drop.y = Math.random() * -400;
     drop.x = Math.random() * 950;
 }
@@ -314,12 +407,6 @@ gameScene.gameOver = function () {
     
     
     total = 0;
-
-//    //restart game
-//    this.time.delayedCall(10000, function () {    
-//        this.scene.restart();
-//        mutr = false;
-//    }, [], this);
 }
 
 
@@ -351,7 +438,7 @@ let config = {
             debug: false
         }
     },
-    scene: [mainMenu, helpScreen, gameScene]
+    scene: [mainMenu, helpScreen, modeSelect, gameScene]
 };
 
 // create a new game, pass the configuration
