@@ -129,7 +129,7 @@ helpScreen.preload = function(){
 
 helpScreen.create = function () {       
     let helpbg = this.add.sprite(0, 0, 'helpbg');
-    let menubutton = this.add.sprite(90, 1000, 'menubutton');
+    let menubutton = this.add.sprite(90, 1200, 'menubutton');
     
     helpbg.setOrigin(0,0);
     menubutton.setOrigin(0,0);
